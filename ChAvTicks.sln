@@ -21,12 +21,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChAvTicks.Api", "ChAvTicks.
 	ProjectSection(ProjectDependencies) = postProject
 		{060DDEBE-9EC1-4FD9-A216-2D7EF5F8DC01} = {060DDEBE-9EC1-4FD9-A216-2D7EF5F8DC01}
 		{55F74DCA-386E-4CFB-9684-8583D0AAC599} = {55F74DCA-386E-4CFB-9684-8583D0AAC599}
-		{86F84995-3071-4EDC-98D0-8DD9A6AD16F7} = {86F84995-3071-4EDC-98D0-8DD9A6AD16F7}
 	EndProjectSection
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "ChAvTicks.UI", "ChAvTicks.UI\ChAvTicks.UI.esproj", "{013842AF-3E78-40E2-B348-EE84CD7A772E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChAvTicks.TempMvcClient", "ChAvTicks.TempMvcClient\ChAvTicks.TempMvcClient.csproj", "{87819C30-2C0E-4C9C-BCE6-FE5DB533A4D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChAvTicks.TempMvcClient", "ChAvTicks.TempMvcClient\ChAvTicks.TempMvcClient.csproj", "{87819C30-2C0E-4C9C-BCE6-FE5DB533A4D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

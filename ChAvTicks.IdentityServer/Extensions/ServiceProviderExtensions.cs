@@ -1,13 +1,13 @@
 ﻿using ChAvTicks.IdentityServer.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace ChAvTicks.IdentityServer.Seed
+namespace ChAvTicks.IdentityServer.Extensions
 {
-    public static class MigrationHelper
+    public static class ServiceProviderExtensions
     {
         public static async Task MigrateAsync(this IServiceProvider serviceProvider)
         {
-            var dbContext = serviceProvider.GetRequiredService<IdentityDbContext>();
+            var dbContext = serviceProvider.GetRequiredService<IdentityEntities>();
 
             if (dbContext.Database.IsNpgsql())
             {

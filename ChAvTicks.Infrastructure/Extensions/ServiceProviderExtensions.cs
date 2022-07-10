@@ -2,13 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ChAvTicks.Infrastructure.Seed
+namespace ChAvTicks.Infrastructure.Extensions
 {
-    public static class MigrationHelper
+    public static class ServiceProviderExtensions
     {
         public static async Task MigrateAsync(this IServiceProvider serviceProvider)
         {
-            var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
+            var dbContext = serviceProvider.GetRequiredService<ApplicationEntities>();
 
             if (dbContext.Database.IsNpgsql())
             {

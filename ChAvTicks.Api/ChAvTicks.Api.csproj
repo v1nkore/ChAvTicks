@@ -8,12 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.6" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ChAvTicks.Application\ChAvTicks.Application.csproj" />
-    <ProjectReference Include="..\ChAvTicks.IdentityServer\ChAvTicks.IdentityServer.csproj" />
+    <ProjectReference Include="..\ChAvTicks.Infrastructure\ChAvTicks.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="RequestModels\" />
   </ItemGroup>
 
 </Project>

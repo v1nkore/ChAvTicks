@@ -2,9 +2,9 @@
 
 namespace ChAvTicks.Infrastructure.Persistence
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationEntities : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public ApplicationEntities(DbContextOptions<ApplicationEntities> options)
             :base(options)
         {
             

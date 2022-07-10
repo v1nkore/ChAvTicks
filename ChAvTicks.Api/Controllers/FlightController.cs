@@ -1,6 +1,7 @@
-﻿using ChAvTicks.Application.Dtos;
-using ChAvTicks.Domain.Enums;
+﻿using ChAvTicks.Application.Dtos.Flight.Common;
+using ChAvTicks.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace ChAvTicks.Api.Controllers
 {
@@ -8,41 +9,48 @@ namespace ChAvTicks.Api.Controllers
     [Route("api/[controller]")]
     public sealed class FlightController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
+        private readonly IFlightService _flightService;
 
-        public FlightController(IConfiguration configuration)
+        public FlightController(IFlightService flightService)
         {
-            _configuration = configuration;
+            _flightService = flightService;
         }
 
         [HttpGet("status")]
-        public async Task GetFlightStatusAsync()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FlightDto>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetFlightAsync(
+            [FromQuery, Required] string searchBy, 
+            [FromQuery, Required] string searchParameter, 
+            [FromQuery]string? dateLocal)
         {
-            var tempFlightStatusDto = new FlightStatusDto(
-                FlightStatusSearchBy.CallSign,
-                "KLM1846", 
-                new DateOnly(2022, 7, 5).ToString("yyyy-MM-dd"));
+            var flights = await _flightService.GetFlightAsync(searchBy, searchParameter, dateLocal);
 
-            var client = new HttpClient();
-            var path = new Uri($"{_configuration["AeroDataBoxApi:FlightApi:Uri"]}" +
-                               $"/{tempFlightStatusDto.SearchBy}" +
-                               $"/{tempFlightStatusDto.SearchParameter}" +
-                               $"/{tempFlightStatusDto.DateLocal}");
-
-            var request = new HttpRequestMessage()
+            if (flights is null)
             {
-                Method = HttpMethod.Get,
-                RequestUri = path,
-                Headers =
-                {
-                    {"X-RapidAPI-Key", $"{_configuration["AeroDataBoxApi:FlightApi:Key"]}"},
-                    {"X-RapidAPI-Host", $"{_configuration["AeroDataBoxApi:FlightApi:Host"]}"},
-                },
-            };
+                return NotFound();
+            }
 
-            using var response = await client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-            var body = await response.Content.ReadAsStringAsync();
+            return Ok(flights);
+        }
+
+        [HttpGet("departureDates")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string[]))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetAsync(
+            [FromQuery, Required] string searchBy,
+            [FromQuery, Required] string searchParameter,
+            [FromQuery] string? fromLocal,
+            [FromQuery] string? toLocal)
+        {
+            var departureDates = await _flightService.GetFlightDepartureDatesAsync(searchBy, searchParameter, fromLocal, toLocal);
+
+            if (departureDates is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(departureDates);
         }
     }
 }

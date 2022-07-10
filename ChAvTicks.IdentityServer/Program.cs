@@ -1,7 +1,7 @@
 using ChAvTicks.IdentityServer.Configuration;
+using ChAvTicks.IdentityServer.Extensions;
 using ChAvTicks.IdentityServer.Identity;
 using ChAvTicks.IdentityServer.Persistence;
-using ChAvTicks.IdentityServer.Seed;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +11,7 @@ var configuration = builder.Configuration
     .AddJsonFile("appsettings.Development.json")
     .Build();
 
-builder.Services.AddDbContext<IdentityDbContext>(config =>
+builder.Services.AddDbContext<IdentityEntities>(config =>
     {
         config.UseNpgsql(configuration.GetConnectionString("DevConnection"));
     })
@@ -23,7 +23,7 @@ builder.Services.AddDbContext<IdentityDbContext>(config =>
         config.Password.RequireUppercase = true;
         config.Password.RequireDigit = true;
     })
-    .AddEntityFrameworkStores<IdentityDbContext>();
+    .AddEntityFrameworkStores<IdentityEntities>();
 
 builder.Services.AddIdentityServer(config =>
     {
