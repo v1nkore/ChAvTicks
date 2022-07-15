@@ -1,5 +1,6 @@
 ﻿using ChAvTicks.Application.Dtos.Base;
 using ChAvTicks.Application.Dtos.Flight.Common;
+using ChAvTicks.Domain.Enums.Flight;
 
 namespace ChAvTicks.Application.Dtos.Flight.Schedule
 {
@@ -9,8 +10,8 @@ namespace ChAvTicks.Application.Dtos.Flight.Schedule
             FlightArrivalDto Arrival,
             string Number,
             string? CallSign,
-            string Status,
-            string CodeshareStatus,
+            FlightStatus Status,
+            CodeshareStatus CodeshareStatus,
             bool IsCargo,
             FlightAircraftDto Aircraft,
             FlightAirlineDto Airline,

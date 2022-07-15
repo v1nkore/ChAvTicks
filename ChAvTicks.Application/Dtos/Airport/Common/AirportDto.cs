@@ -17,7 +17,7 @@ namespace ChAvTicks.Application.Dtos.Airport.Common
             [Required] string TimeZone,
             [Required] AirportUrlsDto Urls,
             IEnumerable<AirportRunwayDto> Runways,
-            AirportTimeDto CurrentTime)
+            AirportLocalTimeDto CurrentTime)
         : AirportDtoBase(
             Icao,
             Iata,

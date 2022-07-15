@@ -55,6 +55,8 @@ builder.Services.AddControllers();
 
 builder.Services.TryAddSingleton<FlightApiSettings, FlightApiSettings>();
 builder.Services.TryAddTransient<IFlightService, FlightService>();
+builder.Services.TryAddTransient<IAirportService, AirportService>();
+builder.Services.TryAddTransient<IAircraftService, AircraftService>();
 
 var app = builder.Build();
 

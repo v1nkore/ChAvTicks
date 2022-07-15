@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using ChAvTicks.Domain.Enums.Aircraft;
 
 namespace ChAvTicks.Application.Dtos.Aircraft
 {
@@ -6,7 +8,7 @@ namespace ChAvTicks.Application.Dtos.Aircraft
         [Required] long Id,
         [Required] string Registration,
         [Required] bool Active,
-        string? Serial,
+        string? SerialNumber,
         string? HexIcao,
         string? AirlineName,
         string? IataType,
@@ -14,18 +16,22 @@ namespace ChAvTicks.Application.Dtos.Aircraft
         string? IcaoCode,
         string? Model,
         string? ModelCode,
-        int NumSeats,
-        string? RolloutDate,
-        string? FirstFlightDate,
-        string? DeliveryDate,
-        string? RegistrationDate,
+        [property: JsonPropertyName("numSeats")] int SeatsNumber,
+        DateTime? RolloutDate,
+        DateTime? FirstFlightDate,
+        DateTime? DeliveryDate,
+        DateTime? RegistrationDate,
         string? TypeName,
-        int NumEngines,
-        string EngineType,
+        [property: JsonPropertyName("numEngines")] int EnginesNumber,
+        AircraftEngineType EngineType,
         [Required] bool IsFreighter,
         string? ProductionLine,
-        double AgeYears,
-        [Required] bool Verified,
+        [property: JsonPropertyName("ageYears")] double Age,
+        [Required]
+        [property: JsonPropertyName("verified")]
+        bool IsVerified,
+        [Required]
+        [property: JsonPropertyName("numRegistrations")]
         int NumRegistrations,
         IEnumerable<AircraftRegistrationDto> Registrations);
 }

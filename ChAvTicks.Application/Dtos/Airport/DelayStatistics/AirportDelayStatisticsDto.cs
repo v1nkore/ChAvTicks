@@ -5,10 +5,10 @@ namespace ChAvTicks.Application.Dtos.Airport.DelayStatistics
 {
     public sealed record AirportDelayStatisticsDto(
         [Required] string AirportIcao,
-        [Required] string FromLocal,
-        [Required] string ToLocal,
-        [Required] string FromUtc,
-        [Required] string ToUtc,
+        [Required] DateTime FromLocal,
+        [Required] DateTime ToLocal,
+        [Required] DateTime FromUtc,
+        [Required] DateTime ToUtc,
         [Required] [property: JsonPropertyName("departuresDelayInformation")] AirportDeparturesDelayDto DeparturesDelay,
         [Required] [property: JsonPropertyName("arrivalsDelayInformation")] AirportArrivalsDelayDto ArrivalsDelay);
 }

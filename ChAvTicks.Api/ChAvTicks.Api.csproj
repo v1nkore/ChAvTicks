@@ -17,8 +17,4 @@
     <ProjectReference Include="..\ChAvTicks.Infrastructure\ChAvTicks.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="RequestModels\" />
-  </ItemGroup>
-
 </Project>

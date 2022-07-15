@@ -7,5 +7,5 @@ namespace ChAvTicks.Application.Dtos.Aircraft
         [Required] bool Active,
         string? HexIcao,
         string? AirlineName,
-        string? RegistrationDate);
+        DateTime? RegistrationDate);
 }

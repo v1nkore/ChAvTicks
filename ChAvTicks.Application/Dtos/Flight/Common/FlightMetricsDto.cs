@@ -2,7 +2,7 @@
 
 namespace ChAvTicks.Application.Dtos.Flight.Common
 {
-    public sealed record FlightDistanceDto(
+    public sealed record FlightMetricsDto(
             double Meter,
             double Km,
             double Mile,

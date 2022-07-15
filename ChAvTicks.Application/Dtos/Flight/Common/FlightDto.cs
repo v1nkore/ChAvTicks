@@ -1,17 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using ChAvTicks.Domain.Enums.Flight;
 
 namespace ChAvTicks.Application.Dtos.Flight.Common
 {
     public sealed record FlightDto(
-        [property: JsonPropertyName("greatCircleDistance")] FlightDistanceDto Distance,
+        [property: JsonPropertyName("greatCircleDistance")] FlightMetricsDto Distance,
         [Required] FlightDepartureDto Departure,
         [Required] FlightArrivalDto Arrival,
-        [Required] string LastUpdatedUtc,
+        [Required] DateTime LastUpdatedUtc,
         [Required] string Number,
         string? CallSign,
-        [Required] string Status,
-        [Required] string CodeshareStatus,
+        [Required] FlightStatus Status,
+        [Required] CodeshareStatus CodeshareStatus,
         [Required] bool IsCargo,
         FlightAircraftDto Aircraft,
         FlightAirlineDto Airline,

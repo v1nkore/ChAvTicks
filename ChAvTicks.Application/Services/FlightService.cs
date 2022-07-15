@@ -1,13 +1,17 @@
 ﻿using ChAvTicks.Application.Configuration;
 using ChAvTicks.Application.Dtos.Flight.Common;
+using ChAvTicks.Application.Dtos.Flight.DelayStatistics;
+using ChAvTicks.Application.Dtos.Flight.Schedule;
 using ChAvTicks.Application.HttpRequests;
 using ChAvTicks.Application.Interfaces;
+using ChAvTicks.Application.Queries.Flight;
+using ChAvTicks.Application.UrlConverter;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System.Text.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace ChAvTicks.Application.Services
 {
-
     public sealed class FlightService : IFlightService
     {
         private readonly HttpClient _httpClient;
@@ -19,39 +23,49 @@ namespace ChAvTicks.Application.Services
             _flightApiSettings = flightApiSettings;
         }
 
-        public async Task<IEnumerable<FlightDto>?> GetFlightAsync(string searchBy, string searchParameter, string? dateLocal)
+        public async Task<IEnumerable<FlightDto>?> GetFlightsAsync(FlightsQuery query)
         {
-            var uri = new Uri($"{FlightApiConstants.Endpoints.Flight}/{searchBy}/{searchParameter}/{dateLocal}");
+            var uri = new Uri(
+                $"{FlightApiConstants.FlightEndpoints.BaseUrl}/{query.SearchBy}/{query.SearchParameter}/{query.DateLocal}?{query.WithLocation}");
             var request = RequestBuilder.CreateFlightRequest(HttpMethod.Get, uri, _flightApiSettings);
 
             var response = await _httpClient.SendAsync(request);
 
-            IEnumerable<FlightDto>? flights = null;
-            if (response.IsSuccessStatusCode)
-            {
-                var body = await response.Content.ReadAsStreamAsync();
-                flights = await JsonSerializer.DeserializeAsync<IEnumerable<FlightDto>>(
-                    body, new JsonSerializerOptions{ PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
-            }
-
-            return flights;
+            return await ResponseHandler.HandleAsync<IEnumerable<FlightDto>?>(response);
         }
 
-        public async Task<string[]?> GetFlightDepartureDatesAsync(string searchBy, string searchParameter, string? fromLocal, string? toLocal)
+        public async Task<string[]?> GetFlightDepartureDatesAsync(FlightDepartureDatesQuery query)
         {
-            var uri = new Uri($"{FlightApiConstants.Endpoints.Flight}/{searchBy}/{searchParameter}/dates/{fromLocal}/{toLocal}");
+            var uri = new Uri(
+                $"{FlightApiConstants.FlightEndpoints.BaseUrl}/{query.SearchBy}/{query.SearchParameter}/dates/{query.FromLocal}/{query.ToLocal}");
             var request = RequestBuilder.CreateFlightRequest(HttpMethod.Get, uri, _flightApiSettings);
 
             var response = await _httpClient.SendAsync(request);
 
-            string[]? departureDates = null;
-            if (response.IsSuccessStatusCode)
-            {
-                var body = await response.Content.ReadAsStreamAsync();
-                departureDates = await JsonSerializer.DeserializeAsync<string[]?>(body);
-            }
+            return await ResponseHandler.HandleAsync<string[]?>(response);
+        }
 
-            return departureDates;
+        public async Task<FlightDelayStatisticsDto?> GetFlightDelayStatisticsAsync(string flightNumber)
+        {
+            var uri = new Uri(
+                $"{FlightApiConstants.FlightEndpoints.BaseUrl}/{flightNumber}/delays");
+            var request = RequestBuilder.CreateFlightRequest(HttpMethod.Get, uri, _flightApiSettings);
+
+            var response = await _httpClient.SendAsync(request);
+
+            return await ResponseHandler.HandleAsync<FlightDelayStatisticsDto?>(response);
+        }
+
+        public async Task<AirportScheduleDto?> GetAirportScheduleAsync([FromQuery, Required] AirportScheduleQuery query)
+        {
+            var fromQueryParams = query.ConvertQueryParams().Replace("%3a", ":");
+            var uri = new Uri(
+                $"{FlightApiConstants.FlightEndpoints.AirportSchedule}/{query.Icao}/{query.FromLocal}/{query.ToLocal}?{fromQueryParams}");
+            var request = RequestBuilder.CreateFlightRequest(HttpMethod.Get, uri, _flightApiSettings);
+
+            var response = await _httpClient.SendAsync(request);
+
+            return await ResponseHandler.HandleAsync<AirportScheduleDto?>(response);
         }
     }
 }

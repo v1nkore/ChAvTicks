@@ -1,6 +1,7 @@
 ﻿using ChAvTicks.Application.Dtos.Airport.Common;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using ChAvTicks.Domain.Enums.Airport;
 
 namespace ChAvTicks.Application.Dtos.Airport.Runway
 {
@@ -11,7 +12,7 @@ namespace ChAvTicks.Application.Dtos.Airport.Runway
         AirportRunwayWidthDto Width,
         [Required] bool IsClosed,
         AirportLocationDto Location,
-        [Required] string Surface,
+        [Required] AirportRunwaySurfaceType Surface,
         AirportRunwayDisplacedThresholdDto DisplacedThreshold,
         bool HasLighting);
 }

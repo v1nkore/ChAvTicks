@@ -1,19 +1,20 @@
 ﻿using ChAvTicks.Application.Dtos.Base;
+using ChAvTicks.Domain.Enums.Flight;
 
 namespace ChAvTicks.Application.Dtos.Flight.DelayStatistics
 {
     public sealed record FlightDestinationDto(
             string AirportIcao,
-            string Class,
+            StatisticType Type,
             int? ScheduledHourUtc,
-            string MedianDelay,
+            TimeSpan MedianDelay,
             int ConsideredFlights,
             IEnumerable<FlightDelayedBracketsDto> DelayedBrackets,
-            string FromUtc,
-            string ToUtc)
+            DateTime FromUtc,
+            DateTime ToUtc)
         : FlightDelayDtoBase(
             AirportIcao,
-            Class,
+            Type,
             ScheduledHourUtc,
             MedianDelay,
             ConsideredFlights,

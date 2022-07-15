@@ -1,22 +1,23 @@
 ﻿using ChAvTicks.Application.Dtos.Base;
 using ChAvTicks.Application.Dtos.Flight.Common;
+using ChAvTicks.Domain.Enums.Flight;
 
 namespace ChAvTicks.Application.Dtos.Flight.Schedule
 {
     public sealed record MovementDto(
             FlightAirportDto Airport,
-            string? ScheduledTimeLocal,
-            string? ActualTimeLocal,
-            string? RunwayTimeLocal,
-            string? ScheduledTimeUtc,
-            string? ActualTimeUtc,
-            string? RunwayTimeUtc,
+            DateTime? ScheduledTimeLocal,
+            DateTime? ActualTimeLocal,
+            DateTime? RunwayTimeLocal,
+            DateTime? ScheduledTimeUtc,
+            DateTime? ActualTimeUtc,
+            DateTime? RunwayTimeUtc,
             string? Terminal,
             string? CheckInDesk,
             string? Gate,
             string? BaggageBelt,
             string? Runway,
-            string[] Quality)
+            FlightAirportMovementQuality[] Quality)
         : MovementDtoBase(
             Airport,
             ScheduledTimeLocal,

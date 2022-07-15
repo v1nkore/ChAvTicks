@@ -7,8 +7,8 @@ namespace ChAvTicks.Application.Dtos.Flight.Common
     public sealed record FlightLocationDto(
         [Required][property: JsonPropertyName("pressureAltFt")] int PressureAltFeet,
         [Required][property: JsonPropertyName("gsKt")] int GroundSpeed,
-        [Required] int TrackDegrees,
-        [Required] string ReportedAtUtc,
+        [Required][property: JsonPropertyName("trackDeg")] int TrackDegrees,
+        [Required] DateTime ReportedAtUtc,
         double Latitude,
         double Longitude) : LocationDtoBase(Latitude, Longitude);
 }
