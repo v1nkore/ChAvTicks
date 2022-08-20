@@ -1,10 +1,11 @@
 ﻿using ChAvTicks.Application.Configuration;
-using ChAvTicks.Application.Dtos.Aircraft;
 using ChAvTicks.Application.HttpRequests;
 using ChAvTicks.Application.Interfaces;
-using ChAvTicks.Application.Queries.Aircraft;
+using ChAvTicks.Application.Requests.Aircraft;
+using ChAvTicks.Application.Responses.Aircraft;
 using ChAvTicks.Application.UrlConverter;
 using ChAvTicks.Domain.Enums.Params.Aircraft;
+using ChAvTicks.Shared.ServiceResponses;
 using Microsoft.Extensions.Options;
 
 namespace ChAvTicks.Application.Services
@@ -20,39 +21,38 @@ namespace ChAvTicks.Application.Services
             _flightApiSettings = flightApiSettings;
         }
 
-        public async Task<AircraftDto?> GetAircraftAsync(AircraftQuery query)
+        public async Task<ModelResponseWithError<ModelResponseWithError<AircraftResponse?, string>?, string>?> GetAircraftAsync(AircraftRequest request)
+        {
+            var uri = new Uri(
+                $"{FlightApiEndpoints.AircraftEndpoints.BaseUrl}/{request.SearchBy}/{request.SearchParameter}?{request.ConvertQueryParams()}");
+            var flightRequest = RequestBuilder.CreateFlightRequest(HttpMethod.Get, uri, _flightApiSettings);
+
+            var response = await _httpClient.SendAsync(flightRequest);
+
+            return await ResponseHandler.HandleAsync<ModelResponseWithError<AircraftResponse?, string>>(response);
+        }
+
+        public async Task<ModelResponseWithError<IEnumerable<AircraftRegistrationResponse>?, string>?> GetAircraftRegistrationsAsync(AircraftSearchBy searchBy, string searchParameter)
+        {
+            var uri = new Uri(
+                $"{FlightApiEndpoints.AircraftEndpoints.BaseUrl}/{searchBy}/{searchParameter}/registrations");
+            var flightRequest = RequestBuilder.CreateFlightRequest(HttpMethod.Get, uri, _flightApiSettings);
+
+            var response = await _httpClient.SendAsync(flightRequest);
+
+            return await ResponseHandler.HandleAsync<IEnumerable<AircraftRegistrationResponse>?>(response);
+        }
+
+        public async Task<ModelResponseWithError<IEnumerable<AircraftResponse>?, string>?> GetManyAircraftsAsync(AircraftRequest query)
         {
             var fromQueryParams = query.ConvertQueryParams();
             var uri = new Uri(
-                $"{FlightApiConstants.AircraftEndpoints.BaseUrl}/{query.SearchBy}/{query.SearchParameter}?{fromQueryParams}");
-            var request = RequestBuilder.CreateFlightRequest(HttpMethod.Get, uri, _flightApiSettings);
+                $"{FlightApiEndpoints.AircraftEndpoints.BaseUrl}/{query.SearchBy}/{query.SearchParameter}/all?{fromQueryParams}");
+            var flightRequest = RequestBuilder.CreateFlightRequest(HttpMethod.Get, uri, _flightApiSettings);
 
-            var response = await _httpClient.SendAsync(request);
+            var response = await _httpClient.SendAsync(flightRequest);
 
-            return await ResponseHandler.HandleAsync<AircraftDto?>(response);
-        }
-
-        public async Task<IEnumerable<AircraftRegistrationDto>?> GetAircraftRegistrationsAsync(AircraftSearchBy searchBy, string searchParameter)
-        {
-            var uri = new Uri(
-                $"{FlightApiConstants.AircraftEndpoints.BaseUrl}/{searchBy}/{searchParameter}/registrations");
-            var request = RequestBuilder.CreateFlightRequest(HttpMethod.Get, uri, _flightApiSettings);
-
-            var response = await _httpClient.SendAsync(request);
-
-            return await ResponseHandler.HandleAsync<IEnumerable<AircraftRegistrationDto>?>(response);
-        }
-
-        public async Task<IEnumerable<AircraftDto>?> GetManyAircraftsAsync(AircraftQuery query)
-        {
-            var fromQueryParams = query.ConvertQueryParams();
-            var uri = new Uri(
-                $"{FlightApiConstants.AircraftEndpoints.BaseUrl}/{query.SearchBy}/{query.SearchParameter}/all?{fromQueryParams}");
-            var request = RequestBuilder.CreateFlightRequest(HttpMethod.Get, uri, _flightApiSettings);
-
-            var response = await _httpClient.SendAsync(request);
-
-            return await ResponseHandler.HandleAsync<IEnumerable<AircraftDto>?>(response);
+            return await ResponseHandler.HandleAsync<IEnumerable<AircraftResponse>?>(response);
         }
     }
 }

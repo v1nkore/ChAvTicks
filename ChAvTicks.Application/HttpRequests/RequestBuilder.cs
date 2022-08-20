@@ -14,8 +14,8 @@ namespace ChAvTicks.Application.HttpRequests
                 RequestUri = uri,
                 Headers =
                 {
-                    {FlightApiConstants.HeaderKeys.ApiKey, flightApiSettings.Value.Key},
-                    {FlightApiConstants.HeaderKeys.ApiHost, flightApiSettings.Value.Host},
+                    {FlightApiEndpoints.HeaderKeys.ApiKey, flightApiSettings.Value.Key},
+                    {FlightApiEndpoints.HeaderKeys.ApiHost, flightApiSettings.Value.Host},
                 },
             };
 

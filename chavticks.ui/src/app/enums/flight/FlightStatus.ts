@@ -1,0 +1,15 @@
+enum FlightStatus{
+  Unknown,
+  Expected,
+  EnRoute,
+  CheckIn,
+  Boarding,
+  GateClosed,
+  Departed,
+  Delayed,
+  Approaching,
+  Arrived,
+  Canceled,
+  Diverted,
+  CanceledUncertain,
+}

@@ -1,14 +1,15 @@
 ﻿using ChAvTicks.Application.Configuration;
-using ChAvTicks.Application.Dtos.Flight.Common;
-using ChAvTicks.Application.Dtos.Flight.DelayStatistics;
-using ChAvTicks.Application.Dtos.Flight.Schedule;
 using ChAvTicks.Application.HttpRequests;
 using ChAvTicks.Application.Interfaces;
-using ChAvTicks.Application.Queries.Flight;
 using ChAvTicks.Application.UrlConverter;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.ComponentModel.DataAnnotations;
+using ChAvTicks.Application.Requests.Flight;
+using ChAvTicks.Application.Responses.Flight.Common;
+using ChAvTicks.Application.Responses.Flight.DelayStatistics;
+using ChAvTicks.Application.Responses.Flight.Schedule;
+using ChAvTicks.Shared.ServiceResponses;
 
 namespace ChAvTicks.Application.Services
 {
@@ -23,49 +24,53 @@ namespace ChAvTicks.Application.Services
             _flightApiSettings = flightApiSettings;
         }
 
-        public async Task<IEnumerable<FlightDto>?> GetFlightsAsync(FlightsQuery query)
+        public async Task<ModelResponseWithError<IEnumerable<FlightResponse>?, string>?> GetFlightsAsync(
+            FlightsRequest request)
         {
             var uri = new Uri(
-                $"{FlightApiConstants.FlightEndpoints.BaseUrl}/{query.SearchBy}/{query.SearchParameter}/{query.DateLocal}?{query.WithLocation}");
-            var request = RequestBuilder.CreateFlightRequest(HttpMethod.Get, uri, _flightApiSettings);
+                $"{FlightApiEndpoints.FlightEndpoints.BaseUrl}/{request.SearchBy}/{request.SearchParameter}/{request.DateLocal}?{request.WithLocation}");
+            var flightRequest = RequestBuilder.CreateFlightRequest(HttpMethod.Get, uri, _flightApiSettings);
 
-            var response = await _httpClient.SendAsync(request);
+            var response = await _httpClient.SendAsync(flightRequest);
 
-            return await ResponseHandler.HandleAsync<IEnumerable<FlightDto>?>(response);
+            return await ResponseHandler.HandleAsync<IEnumerable<FlightResponse>?>(response);
         }
 
-        public async Task<string[]?> GetFlightDepartureDatesAsync(FlightDepartureDatesQuery query)
+        public async Task<ModelResponseWithError<string[]?, string>?> GetFlightDepartureDatesAsync(
+            FlightDepartureDatesRequest request)
         {
             var uri = new Uri(
-                $"{FlightApiConstants.FlightEndpoints.BaseUrl}/{query.SearchBy}/{query.SearchParameter}/dates/{query.FromLocal}/{query.ToLocal}");
-            var request = RequestBuilder.CreateFlightRequest(HttpMethod.Get, uri, _flightApiSettings);
+                $"{FlightApiEndpoints.FlightEndpoints.BaseUrl}/{request.SearchBy}/{request.SearchParameter}/dates/{request.FromLocal}/{request.ToLocal}");
+            var flightRequest = RequestBuilder.CreateFlightRequest(HttpMethod.Get, uri, _flightApiSettings);
 
-            var response = await _httpClient.SendAsync(request);
+            var response = await _httpClient.SendAsync(flightRequest);
 
             return await ResponseHandler.HandleAsync<string[]?>(response);
         }
 
-        public async Task<FlightDelayStatisticsDto?> GetFlightDelayStatisticsAsync(string flightNumber)
+        public async Task<ModelResponseWithError<FlightDelayStatisticsResponse?, string>?>
+            GetFlightDelayStatisticsAsync(string flightNumber)
         {
             var uri = new Uri(
-                $"{FlightApiConstants.FlightEndpoints.BaseUrl}/{flightNumber}/delays");
-            var request = RequestBuilder.CreateFlightRequest(HttpMethod.Get, uri, _flightApiSettings);
+                $"{FlightApiEndpoints.FlightEndpoints.BaseUrl}/{flightNumber}/delays");
+            var flightRequest = RequestBuilder.CreateFlightRequest(HttpMethod.Get, uri, _flightApiSettings);
 
-            var response = await _httpClient.SendAsync(request);
+            var response = await _httpClient.SendAsync(flightRequest);
 
-            return await ResponseHandler.HandleAsync<FlightDelayStatisticsDto?>(response);
+            return await ResponseHandler.HandleAsync<FlightDelayStatisticsResponse?>(response);
         }
 
-        public async Task<AirportScheduleDto?> GetAirportScheduleAsync([FromQuery, Required] AirportScheduleQuery query)
+        public async Task<ModelResponseWithError<AirportScheduleResponse?, string>?> GetAirportScheduleAsync(
+            [FromQuery] [Required] AirportScheduleRequest request)
         {
-            var fromQueryParams = query.ConvertQueryParams().Replace("%3a", ":");
+            var fromQueryParams = request.ConvertQueryParams();
             var uri = new Uri(
-                $"{FlightApiConstants.FlightEndpoints.AirportSchedule}/{query.Icao}/{query.FromLocal}/{query.ToLocal}?{fromQueryParams}");
-            var request = RequestBuilder.CreateFlightRequest(HttpMethod.Get, uri, _flightApiSettings);
+                $"{FlightApiEndpoints.FlightEndpoints.AirportSchedule}/{request.Icao}/{request.FromLocal}/{request.ToLocal}?{fromQueryParams}");
+            var flightRequest = RequestBuilder.CreateFlightRequest(HttpMethod.Get, uri, _flightApiSettings);
 
-            var response = await _httpClient.SendAsync(request);
+            var response = await _httpClient.SendAsync(flightRequest);
 
-            return await ResponseHandler.HandleAsync<AirportScheduleDto?>(response);
+            return await ResponseHandler.HandleAsync<AirportScheduleResponse?>(response);
         }
     }
 }

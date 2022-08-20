@@ -1,0 +1,27 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.container-fluid {
+  padding: 0px;
+  margin: 0px;
+}
+
+.header_link {
+  margin-left: 10%;
+}
+
+.header_buttons>.btn:not(:last-child) {
+  margin-right: 30px;
+}
+
+.header_buttons>.btn:last-child {
+  margin-right: 30px;
+}
+
+.header_buttons button {
+  padding: 8px 15px;
+  margin: 15px 0px;
+  border-radius: 15px;
+}

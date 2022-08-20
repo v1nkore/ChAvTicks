@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ChAvTicks.IdentityServer.Account.Requests.RegisterRequest
+
+<div class="registration-page">
+    <h1>Registration</h1>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+
+            <div class="card-body">
+                <form asp-route="Register">
+                    <input type="hidden" asp-for="ReturnUrl" />
+
+                    <div class="form-group">
+                        <label asp-for="UserName"></label>
+                        <input class="form-control" placeholder="Username" asp-for="UserName" autofocus>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password"></label>
+                        <input type="password" class="form-control" placeholder="Password" asp-for="Password" autocomplete="off">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label asp-for="ConfirmedPassword"></label>
+                        <input type="password" class="form-control" placeholder="Repeat Password" asp-for="ConfirmedPassword" autocomplete="off">
+                    </div>
+
+                    <button class="btn btn-primary" name="button" value="register">Register</button>
+                    <a class="btn btn-secondary" asp-action="Login">Already have account?</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

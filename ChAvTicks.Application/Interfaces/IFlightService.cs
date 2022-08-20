@@ -1,14 +1,17 @@
-﻿using ChAvTicks.Application.Dtos.Flight.Common;
-using ChAvTicks.Application.Dtos.Flight.DelayStatistics;
-using ChAvTicks.Application.Dtos.Flight.Schedule;
-using ChAvTicks.Application.Queries.Flight;
+﻿using ChAvTicks.Application.Requests.Flight;
+using ChAvTicks.Application.Responses.Flight.Common;
+using ChAvTicks.Application.Responses.Flight.DelayStatistics;
+using ChAvTicks.Application.Responses.Flight.Schedule;
+using ChAvTicks.Shared.ServiceResponses;
 
 namespace ChAvTicks.Application.Interfaces;
 
 public interface IFlightService
 {
-    Task<IEnumerable<FlightDto>?> GetFlightsAsync(FlightsQuery query);
-    Task<string[]?> GetFlightDepartureDatesAsync(FlightDepartureDatesQuery query);
-    Task<FlightDelayStatisticsDto?> GetFlightDelayStatisticsAsync(string flightNumber);
-    Task<AirportScheduleDto?> GetAirportScheduleAsync(AirportScheduleQuery query);
+    Task<ModelResponseWithError<IEnumerable<FlightResponse>?, string>?> GetFlightsAsync(FlightsRequest request);
+    Task<ModelResponseWithError<string[]?, string>?> GetFlightDepartureDatesAsync(FlightDepartureDatesRequest request);
+    Task<ModelResponseWithError<FlightDelayStatisticsResponse?, string>?> GetFlightDelayStatisticsAsync(
+        string flightNumber);
+    Task<ModelResponseWithError<AirportScheduleResponse?, string>?> GetAirportScheduleAsync(
+        AirportScheduleRequest request);
 }

@@ -14,6 +14,6 @@
         Arrived,
         Canceled,
         Diverted,
-        CanceledUncertain
+        CanceledUncertain,
     }
 }

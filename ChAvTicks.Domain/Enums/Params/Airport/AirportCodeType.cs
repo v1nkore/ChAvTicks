@@ -2,8 +2,8 @@
 {
     public enum AirportCodeType
     {
-        Icao,
         Iata,
+        Icao,
         Local
     }
 }

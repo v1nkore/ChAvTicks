@@ -5,6 +5,6 @@
         Unknown,
         Jet,
         Turboprop,
-        Piston
+        Piston,
     }
 }

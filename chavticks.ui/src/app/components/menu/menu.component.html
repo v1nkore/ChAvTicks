@@ -1,0 +1,14 @@
+<div class="container-fluid">
+  <section class="header">
+    <nav class="navbar navbar-light bg-light">
+      <a routerLink="" class="header_link navbar-brand">ChAvTicks.UI.Angular</a>
+      <div class="header_buttons">
+        <button *ngIf="!isUserAuthenticated" class="header_buttons_signin btn btn-outline-primary" (click)="login()">Sign in</button>
+        <button *ngIf="!isUserAuthenticated" class="header_buttons_signup btn btn-outline-dark" routerLink="/registration">Sign up</button>
+        <button *ngIf="isUserAuthenticated" class="header_buttons_logout btn btn-outline-danger" (click)="logout()">Logout</button>
+      </div>
+    </nav>
+  </section>
+</div>
+
+<router-outlet></router-outlet>
