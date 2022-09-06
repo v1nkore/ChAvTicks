@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -17,14 +18,26 @@ namespace ChAvTicks.Application.JsonConverters
                 return DateTime.Parse(string.Empty);
             }
 
-            if (dateTime.Contains('Z') && !dateTime.Contains('T'))
+            if (dateTime.Contains('+'))
+            {
+                var offset = dateTime.Substring(dateTime.IndexOf('+'), dateTime.Length - dateTime.IndexOf('+'));
+                return DateTime.ParseExact(dateTime, $"{DateTimeDefaults.DateTimeWithoutSec}{offset}", null);
+            }
+
+            if (dateTime.LastIndexOf('-') == 16)
+            {
+                var offset = dateTime.Substring(dateTime.LastIndexOf('-'), dateTime.Length - dateTime.LastIndexOf('-'));
+                return DateTime.ParseExact(dateTime, $"{DateTimeDefaults.DateTimeWithoutSec}{offset}", null);
+            }
+
+            if (dateTime.Contains('Z'))
             {
                 return DateTime.ParseExact(dateTime, DateTimeDefaults.UtcDateTimeFormat, null);
             }
 
-            if (dateTime.Contains('T') && !dateTime.Contains('Z'))
+            if (dateTime.Contains('T'))
             {
-                return DateTime.ParseExact(dateTime, DateTimeDefaults.LocalDateTimeFormat, null);
+                return DateTime.ParseExact(dateTime, DateTimeDefaults.FullLocalDateTimeFormat, null);
             }
 
             return DateTime.ParseExact(dateTime, DateTimeDefaults.DateOnlyFormat, null);

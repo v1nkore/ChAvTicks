@@ -1,4 +1,0 @@
-enum FlightStatisticType {
-  Flight,
-  FlightAndHour
-}

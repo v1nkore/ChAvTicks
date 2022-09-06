@@ -22,6 +22,7 @@ namespace ChAvTicks.Api.Controllers
         [HttpGet("{searchBy}/{searchParameter}/{dateLocal}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FlightResponse>))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetFlightsAsync([FromQuery, Required] FlightsRequest query)
         {
             var response = await _flightService.GetFlightsAsync(query);
@@ -42,6 +43,7 @@ namespace ChAvTicks.Api.Controllers
         [HttpGet("{searchBy}/{searchParameter}/dates/{fromLocal}/{toLocal}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string[]))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetFlightDepartureDatesAsync([FromQuery, Required] FlightDepartureDatesRequest query)
         {
             var response = await _flightService.GetFlightDepartureDatesAsync(query);
@@ -62,7 +64,8 @@ namespace ChAvTicks.Api.Controllers
         [HttpGet("{flightNumber}/delays")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FlightDelayStatisticsResponse))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> GetFlightDelayStatisticsAsync([FromRoute, Required] string flightNumber)
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetFlightDelayStatisticsAsync([FromRoute] string flightNumber)
         {
             var response = await _flightService.GetFlightDelayStatisticsAsync(flightNumber);
 
@@ -82,6 +85,7 @@ namespace ChAvTicks.Api.Controllers
         [HttpGet("airport-schedule/{icao}/{fromLocal}/{toLocal}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AirportScheduleResponse))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetAirportScheduleAsync([FromQuery, Required] AirportScheduleRequest query)
         {
             var response = await _flightService.GetAirportScheduleAsync(query);
@@ -98,6 +102,26 @@ namespace ChAvTicks.Api.Controllers
 
             return Ok(response.Model);
         }
-        
+
+        [HttpPost("search")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AirportFlightEventResponse>))]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> SearchAsync([FromBody] SearchFlightsRequest flightsRequest)
+        {
+            var response = await _flightService.SearchAsync(flightsRequest);
+
+            if (response == null)
+            {
+                return NoContent();
+            }
+
+            if (response.Model == null)
+            {
+                return BadRequest(response.ErrorMessage);
+            }
+
+            return Ok(response.Model);
+        }
     }
 }

@@ -8,10 +8,10 @@ namespace ChAvTicks.Application.Interfaces;
 
 public interface IFlightService
 {
+    Task<ModelResponseWithError<IEnumerable<AirportFlightEventResponse>?, string>?> SearchAsync(SearchFlightsRequest request);
     Task<ModelResponseWithError<IEnumerable<FlightResponse>?, string>?> GetFlightsAsync(FlightsRequest request);
     Task<ModelResponseWithError<string[]?, string>?> GetFlightDepartureDatesAsync(FlightDepartureDatesRequest request);
-    Task<ModelResponseWithError<FlightDelayStatisticsResponse?, string>?> GetFlightDelayStatisticsAsync(
-        string flightNumber);
-    Task<ModelResponseWithError<AirportScheduleResponse?, string>?> GetAirportScheduleAsync(
-        AirportScheduleRequest request);
+    Task<ModelResponseWithError<FlightDelayStatisticsResponse?, string>?> GetFlightDelayStatisticsAsync(string flightNumber);
+
+    Task<ModelResponseWithError<AirportScheduleResponse?, string>?> GetAirportScheduleAsync(AirportScheduleRequest request);
 }

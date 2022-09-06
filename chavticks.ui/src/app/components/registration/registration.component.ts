@@ -26,8 +26,6 @@ export class RegistrationComponent implements OnInit {
   public register() {
     const url = `https://localhost:7091/account/register?returnUrl=${this.registrationForm.value.returnUrl}}`;
     this._httpClient.post(url, this.registrationForm.value)
-      .subscribe(response => {
-
-      });
+      .subscribe();
   }
 }

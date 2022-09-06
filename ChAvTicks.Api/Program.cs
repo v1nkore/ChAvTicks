@@ -1,6 +1,6 @@
 using ChAvTicks.Application.Configuration;
 using ChAvTicks.Application.Interfaces;
-using ChAvTicks.Application.Parsers.AirportSearchParamsParser;
+using ChAvTicks.Application.Parsers.AirportsParser;
 using ChAvTicks.Application.Services;
 using ChAvTicks.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -43,7 +43,7 @@ builder.Services.TryAddTransient<IAirportService, AirportService>();
 builder.Services.TryAddTransient<IAircraftService, AircraftService>();
 builder.Services.TryAddTransient<IHealthcheckService, HealthcheckService>();
 
-builder.Services.AddHostedService<AirportSearchParamsParser>();
+builder.Services.AddHostedService<AirportsParser>();
 
 var app = builder.Build();
 

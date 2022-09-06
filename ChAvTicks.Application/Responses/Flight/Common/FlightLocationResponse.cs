@@ -6,11 +6,14 @@ namespace ChAvTicks.Application.Responses.Flight.Common
 {
     [Serializable]
     public sealed record FlightLocationResponse(
-        [Required] [property: JsonPropertyName("pressureAltFt")]
+        [Required]
+        [property: JsonPropertyName("pressureAltFt")]
         int PressureAltFeet,
-        [Required] [property: JsonPropertyName("gsKt")]
+        [Required]
+        [property: JsonPropertyName("gsKt")]
         int GroundSpeed,
-        [Required] [property: JsonPropertyName("trackDeg")]
+        [Required]
+        [property: JsonPropertyName("trackDeg")]
         int TrackDegrees,
         [Required] DateTime ReportedAtUtc,
         double Latitude,

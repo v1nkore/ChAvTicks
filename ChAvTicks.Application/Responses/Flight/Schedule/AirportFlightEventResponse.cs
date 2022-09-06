@@ -1,5 +1,6 @@
 ﻿using ChAvTicks.Application.Responses.Flight.Common;
 using ChAvTicks.Domain.Enums.Flight;
+using System.Text.Json.Serialization;
 
 namespace ChAvTicks.Application.Responses.Flight.Schedule
 {
@@ -9,7 +10,9 @@ namespace ChAvTicks.Application.Responses.Flight.Schedule
         FlightEventResponse Arrival,
         string Number,
         string? CallSign,
+        [property: JsonConverter(typeof(JsonStringEnumConverter))]
         FlightStatus Status,
+        [property: JsonConverter(typeof(JsonStringEnumConverter))]
         CodeshareStatus CodeshareStatus,
         bool IsCargo,
         FlightAircraftResponse Aircraft,
