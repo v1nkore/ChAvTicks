@@ -4,6 +4,7 @@ import {CodeshareStatus} from "../enums/CodeshareStatus";
 import {FlightAircraftResponse} from "./FlightAircraftResponse";
 import {FlightAirlineResponse} from "./FlightAirlineResponse";
 import {FlightLocationResponse} from "./FlightLocationResponse";
+import {Queue} from "queue-typescript";
 
 export class FlightSearchResponse {
   movement: FlightEventResponse;
@@ -17,4 +18,5 @@ export class FlightSearchResponse {
   aircraft: FlightAircraftResponse;
   airline: FlightAirlineResponse;
   location: FlightLocationResponse;
+  transfers:  Queue<FlightSearchResponse>;
 }

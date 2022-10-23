@@ -1,8 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-using ChAvTicks.Application.Responses.Airport.Common;
+﻿using ChAvTicks.Application.Responses.Airport.Common;
 using ChAvTicks.Application.Responses.Flight.Common;
 using ChAvTicks.Domain.Enums.Airport;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ChAvTicks.Application.Responses.Airport.Runway
 {
@@ -15,8 +15,8 @@ namespace ChAvTicks.Application.Responses.Airport.Runway
         FlightMetricsResponse Width,
         [Required] bool IsClosed,
         AirportLocationResponse Location,
-        [property: JsonConverter(typeof(JsonStringEnumConverter))] [Required]
-        AirportRunwaySurfaceType SurfaceType,
+        [property: JsonConverter(typeof(JsonStringEnumConverter))]
+        [Required] AirportRunwaySurfaceType SurfaceType,
         FlightMetricsResponse DisplacedThreshold,
         bool HasLighting);
 }

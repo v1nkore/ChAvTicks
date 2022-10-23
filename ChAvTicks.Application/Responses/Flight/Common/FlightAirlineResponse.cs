@@ -3,5 +3,5 @@
 namespace ChAvTicks.Application.Responses.Flight.Common
 {
     [Serializable]
-    public sealed record FlightAirlineResponse([Required] string Name);
+    public sealed record FlightAirlineResponse([Required] string? Name);
 }

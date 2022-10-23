@@ -16,7 +16,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ChAvTicks.Domain\ChAvTicks.Domain.csproj" />
     <ProjectReference Include="..\ChAvTicks.Infrastructure\ChAvTicks.Infrastructure.csproj" />
-    <ProjectReference Include="..\ChAvTicks.Shared\ChAvTicks.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

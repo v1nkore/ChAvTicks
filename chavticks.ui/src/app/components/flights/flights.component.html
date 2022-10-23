@@ -3,8 +3,12 @@
     <div class="col-sm-6">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">{{flight.departure.scheduledTimeUtc}}</h5>
-          <p class="card-text text-center">{{flight.departure.airport.icao}} - {{flight.departure.airport.name}}</p>
+          <h5 class="card-title">Departure time(UTC): {{flight.departure.scheduledTimeUtc}}</h5>
+          <p class="card-text">
+            Service: {{flight.departure.quality}}
+            <br>Transfers count : {{flight.transfers.length}}
+            <br><a *ngIf="flight.transfers.length > 0">Show details about transfers</a>
+          </p>
           <a class="btn btn-primary">Buy tickets right now</a>
         </div>
       </div>
@@ -13,8 +17,12 @@
     <div class="col-sm-6">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">{{flight.arrival.scheduledTimeUtc}}</h5>
-          <p class="card-text text-center">{{flight.arrival.airport.icao}} - {{flight.arrival.airport.name}}</p>
+          <h5 class="card-title">Arrival time(UTC): {{flight.arrival.scheduledTimeUtc}}</h5>
+          <p class="card-text">
+            Service: {{flight.departure.quality}}
+            <br>Transfers count : {{flight.transfers.length}}
+            <br><a *ngIf="flight.transfers.length > 0">Show details about transfers</a>
+          </p>
           <a class="btn btn-primary">Buy tickets right now</a>
         </div>
       </div>

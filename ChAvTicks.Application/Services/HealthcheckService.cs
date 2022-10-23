@@ -1,31 +1,27 @@
 ﻿using ChAvTicks.Application.Configuration;
-using ChAvTicks.Application.HttpRequests;
+using ChAvTicks.Application.Helpers;
 using ChAvTicks.Application.Interfaces;
 using ChAvTicks.Application.Responses.Healthcheck;
-using ChAvTicks.Shared.ServiceResponses;
-using Microsoft.Extensions.Options;
+using ChAvTicks.Domain.ServiceResponses;
 
 namespace ChAvTicks.Application.Services
 {
     public class HealthcheckService : IHealthcheckService
     {
         private readonly HttpClient _httpClient;
-        private readonly IOptions<FlightApiSettings> _flightApiSettings;
+        private readonly IRequestBuilder _requestBuilder;
 
-        public HealthcheckService(HttpClient httpClient, IOptions<FlightApiSettings> flightApiSettings)
+        public HealthcheckService(HttpClient httpClient, IRequestBuilder requestBuilder)
         {
             _httpClient = httpClient;
-            _flightApiSettings = flightApiSettings;
+            _requestBuilder = requestBuilder;
         }
 
-        public async Task<ModelResponseWithError<AirportFeedHealthcheckResponse?, string>?> GetAirportServicesFeeds(string icao)
+        public async Task<ModelResponseWithError<AirportFeedHealthcheckResponse?, string>?> GetAirportServicesFeedsAsync(string icao)
         {
-            var uri = new Uri($"{FlightApiEndpoints.HealthcheckEndpoints.Icao}/{icao}/feeds");
-            var flightRequest = RequestBuilder.CreateFlightRequest(HttpMethod.Get, uri, _flightApiSettings);
+            var healthcheckUri = new Uri($"{FlightApiEndpoints.HealthcheckEndpoints.Icao}/{icao}/feeds");
 
-            var response = await _httpClient.SendAsync(flightRequest);
-
-            return await ResponseHandler.HandleAsync<AirportFeedHealthcheckResponse?>(response);
+            return await _httpClient.ExecuteHttpRequestAsync<AirportFeedHealthcheckResponse?>(_requestBuilder, HttpMethod.Get, healthcheckUri);
         }
     }
 }

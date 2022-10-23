@@ -1,14 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
 
 namespace ChAvTicks.Domain.Enums.Flight
 {
     public enum AirportMovementQuality
     {
-        [Display(Name = "Basic")]
+        [Description("Basic")]
         Basic,
-        [Display(Name = "Live")]
+        [Description("Live")]
         Live,
-        [Display(Name = "Approximate")]
+        [Description("Approximate")]
         Approximate
     }
 }

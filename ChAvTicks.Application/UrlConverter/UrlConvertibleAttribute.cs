@@ -3,5 +3,4 @@
 [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
 public class UrlConvertibleAttribute : Attribute
 {
-
 }

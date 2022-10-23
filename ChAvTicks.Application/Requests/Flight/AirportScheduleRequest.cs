@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using ChAvTicks.Application.UrlConverter;
+﻿using ChAvTicks.Application.UrlConverter;
 using ChAvTicks.Domain.Enums.Params.Flight;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace ChAvTicks.Application.Requests.Flight
 {
@@ -10,7 +10,7 @@ namespace ChAvTicks.Application.Requests.Flight
     {
         [FromRoute, Required]
         [BindProperty(Name = "icao", SupportsGet = true)]
-        public string Icao { get; set; }
+        public string Icao { get; set; } = string.Empty;
 
         [FromRoute, Required]
         [BindProperty(Name = "fromLocal", SupportsGet = true)]

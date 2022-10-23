@@ -2,7 +2,7 @@
 {
     public class ModelResponseWithError<T, TError>
     {
-        public T? Model { get; init; }
+        public T? Model { get; set; }
         public TError? ErrorMessage { get; init; }
     }
 }

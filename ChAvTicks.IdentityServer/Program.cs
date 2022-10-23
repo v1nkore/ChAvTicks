@@ -16,7 +16,7 @@ var configuration = builder.Configuration
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<IdentityStore>(options =>
+builder.Services.AddDbContext<IdentityStorage>(options =>
 {
     options.UseNpgsql(configuration.GetConnectionString("DevConnection"));
 });
@@ -29,7 +29,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
         options.Password.RequireUppercase = true;
         options.Password.RequiredUniqueChars = 3;
     })
-    .AddEntityFrameworkStores<IdentityStore>()
+    .AddEntityFrameworkStores<IdentityStorage>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddIdentityServer(options =>

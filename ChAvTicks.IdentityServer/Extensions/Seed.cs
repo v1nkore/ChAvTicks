@@ -10,7 +10,7 @@ namespace ChAvTicks.IdentityServer.Extensions
     {
         public static async Task MigrateAsync(this IServiceProvider serviceProvider)
         {
-            var context = serviceProvider.GetRequiredService<IdentityStore>();
+            var context = serviceProvider.GetRequiredService<IdentityStorage>();
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
             if (context.Database.IsNpgsql())

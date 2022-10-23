@@ -13,7 +13,7 @@ namespace ChAvTicks.Application.Requests.Aircraft
 
         [FromRoute]
         [BindProperty(Name = "searchParameter", SupportsGet = true)]
-        public string SearchParameter { get; set; }
+        public string SearchParameter { get; set; } = string.Empty;
 
         [FromQuery]
         public bool WithImage { get; set; }

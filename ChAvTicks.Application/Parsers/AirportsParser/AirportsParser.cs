@@ -1,10 +1,10 @@
-﻿using System.Diagnostics;
-using ChAvTicks.Domain.Entities;
+﻿using ChAvTicks.Domain.Entities.Airport;
 using ChAvTicks.Infrastructure.Persistence;
 using HtmlAgilityPack;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace ChAvTicks.Application.Parsers.AirportsParser
 {
@@ -25,7 +25,7 @@ namespace ChAvTicks.Application.Parsers.AirportsParser
         {
             var stopwatch = Stopwatch.StartNew();
 
-            var url = "http://www.flugzeuginfo.net/table_airportcodes_country-location_en.php?sort=iata";
+            const string url = "http://www.flugzeuginfo.net/table_airportcodes_country-location_en.php?sort=iata";
             var web = new HtmlWeb();
             var doc = web.Load(url);
 
@@ -35,19 +35,17 @@ namespace ChAvTicks.Application.Parsers.AirportsParser
 
             int currentAirportCount;
             List<AirportEntity> existedAirports;
-            List<AirportEntity> additionAirports = new List<AirportEntity>();
+            var additionAirports = new List<AirportEntity>();
             using (var scope = _serviceProvider.CreateScope())
             {
-                var store = scope.ServiceProvider.GetRequiredService<ApplicationStore>();
+                var store = scope.ServiceProvider.GetRequiredService<ApplicationStorage>();
                 currentAirportCount = store.Airports.Count();
                 existedAirports = store.Airports.ToList();
             }
 
             if (currentAirportCount != updatedAirportCount)
             {
-                var tables = doc.DocumentNode.SelectNodes("//table");
-
-                foreach (var table in tables)
+                foreach (var table in doc.DocumentNode.SelectNodes("//table"))
                 {
                     var airportsTable = table.Descendants("tr").Skip(1)
                         .Where(tr => tr.Elements("td").Any())
@@ -70,7 +68,7 @@ namespace ChAvTicks.Application.Parsers.AirportsParser
                     {
                         foreach (var airport in airportsTable)
                         {
-                            if (!airport.Any(l => existedAirports.Any(r => CompareAirportInstances(r, airport))))
+                            if (!airport.Any(_ => existedAirports.Any(r => CompareAirportInstances(r, airport))))
                             {
                                 additionAirports.Add(existedAirports.First(x => CompareAirportInstances(x, airport)));
                             }
@@ -82,7 +80,7 @@ namespace ChAvTicks.Application.Parsers.AirportsParser
                 {
                     using (var scope = _serviceProvider.CreateScope())
                     {
-                        var store = scope.ServiceProvider.GetRequiredService<ApplicationStore>();
+                        var store = scope.ServiceProvider.GetRequiredService<ApplicationStorage>();
                         store.Airports.AddRange(additionAirports);
 
                         store.SaveChanges();
@@ -92,14 +90,16 @@ namespace ChAvTicks.Application.Parsers.AirportsParser
                 {
                     using (var scope = _serviceProvider.CreateScope())
                     {
-                        var store = scope.ServiceProvider.GetRequiredService<ApplicationStore>();
+                        var store = scope.ServiceProvider.GetRequiredService<ApplicationStorage>();
                         var extraAirports = new List<AirportEntity>();
 
-                        foreach (var entity in additionAirports)
+                        foreach (var additionAirport in additionAirports)
                         {
                             extraAirports = store.Airports.AsEnumerable()
-                                .Where(x => CompareAirportInstances(x, new List<string>
-                                    { entity.Iata, entity.Icao, entity.Location, entity.Airport, entity.Country })).ToList();
+                                .Where(x => CompareAirportInstances(x, AnyNullOrEmpty(additionAirport)
+                                ? new List<string>()
+                                : new List<string>() { additionAirport.Iata!, additionAirport.Icao!, additionAirport.Location!, additionAirport.Airport!, additionAirport.Country! }))
+                                .ToList();
                         }
 
                         store.Airports.RemoveRange(extraAirports);
@@ -154,6 +154,14 @@ namespace ChAvTicks.Application.Parsers.AirportsParser
             _timer?.Change(Timeout.Infinite, 0);
 
             return Task.CompletedTask;
+        }
+
+        private static bool AnyNullOrEmpty<TSource>(TSource source) where TSource : class
+        {
+            return source.GetType().GetProperties()
+                .Where(pi => pi.PropertyType == typeof(string))
+                .Select(pi => (string?)pi.GetValue(source))
+                .Any(s => string.IsNullOrEmpty(s));
         }
 
         public void Dispose()

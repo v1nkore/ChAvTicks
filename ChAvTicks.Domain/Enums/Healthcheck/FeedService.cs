@@ -1,9 +1,14 @@
-﻿namespace ChAvTicks.Domain.Enums.Healthcheck
+﻿using System.ComponentModel;
+
+namespace ChAvTicks.Domain.Enums.Healthcheck
 {
-    public enum FeedService
-    {
-        FlightSchedules,
-        FlightLiveUpdates,
-        AdsbUpdates
-    }
+	public enum FeedService
+	{
+		[Description("Flight schedules")]
+		FlightSchedules,
+		[Description("Flight live updates")]
+		FlightLiveUpdates,
+		[Description("Adsb updates")]
+		AdsbUpdates
+	}
 }

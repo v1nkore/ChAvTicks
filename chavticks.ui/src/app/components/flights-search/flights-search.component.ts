@@ -79,30 +79,31 @@ export class FlightsSearchComponent implements OnInit, OnDestroy {
       .subscribe(response => {
 
         let airportSummary: AirportSummaryResponse = new AirportSummaryResponse();
+        //
+        // this._httpClient.get<AirportResponse>(
+        //   `${ApiEndpoints.airportsByTerm}/icao/${this.searchFlightsForm.get('from')?.value}`)
+        //   .subscribe(response => {
+        //     airportSummary.iata = response.iata;
+        //     airportSummary.icao = response.icao;
+        //     airportSummary.name = response.fullName;
+        //     airportSummary.municipalityName = response.municipalityName;
+        //     airportSummary.localCode = response.localCode;
+        //     airportSummary.country = response.country.name;
+        //     airportSummary.countryCode = response.country.code;
+        //     airportSummary.location = response.location;
+        //     airportSummary.shortName = null;
+        //   });
 
-        this._httpClient.get<AirportResponse>(
-          `${ApiEndpoints.airportsByTerm}/icao/${this.searchFlightsForm.get('from')?.value}`)
-          .subscribe(response => {
+        //
+        // for (let flight of response) {
+        //   if (!flight.departure.airport) {
+        //     flight.departure.airport = airportSummary
+        //   }
+        // }
 
-            airportSummary.iata = response.iata;
-            airportSummary.icao = response.icao;
-            airportSummary.name = response.fullName;
-            airportSummary.municipalityName = response.municipalityName;
-            airportSummary.localCode = response.localCode;
-            airportSummary.country = response.country.name;
-            airportSummary.countryCode = response.country.code;
-            airportSummary.shortName = null;
-            airportSummary.location = response.location;
-          });
-
-        console.log(airportSummary);
-        for (let flight of response) {
-          if (!flight.departure.airport) {
-              flight.departure.airport = airportSummary
-          }
-        }
-
-        this._router.navigateByUrl('/flights', {state: {flights: response}});
+        console.log(response);
+        localStorage.setItem('flights', JSON.stringify(response));
+        this._router.navigate(['/flights']);
       }
     );
   }

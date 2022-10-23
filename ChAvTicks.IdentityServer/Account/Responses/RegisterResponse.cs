@@ -2,7 +2,7 @@
 {
     public class RegisterResponse
     {
-        public string Id { get; init; }
-        public string UserName { get; init; }
+        public string? Id { get; init; }
+        public string? UserName { get; init; }
     }
 }

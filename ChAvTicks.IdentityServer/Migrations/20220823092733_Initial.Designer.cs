@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace ChAvTicks.IdentityServer.Migrations
 {
-    [DbContext(typeof(IdentityStore))]
+    [DbContext(typeof(IdentityStorage))]
     [Migration("20220823092733_Initial")]
     partial class Initial
     {

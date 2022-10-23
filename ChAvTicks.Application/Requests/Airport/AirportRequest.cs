@@ -13,7 +13,7 @@ namespace ChAvTicks.Application.Requests.Airport
 
         [FromRoute]
         [BindProperty(Name = "code", SupportsGet = true)]
-        public string Code { get; set; }
+        public string Code { get; set; } = string.Empty;
 
         [FromQuery]
         public bool? WithRunways { get; set; }

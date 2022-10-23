@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace ChAvTicks.Application.Requests.Flight
 {

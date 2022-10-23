@@ -1,10 +1,11 @@
 ﻿using ChAvTicks.Application.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
 using ChAvTicks.Application.Requests.Flight;
 using ChAvTicks.Application.Responses.Flight.Common;
 using ChAvTicks.Application.Responses.Flight.DelayStatistics;
 using ChAvTicks.Application.Responses.Flight.Schedule;
+using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
+using ChAvTicks.Application.Requests.Pagination;
 
 namespace ChAvTicks.Api.Controllers
 {
@@ -107,9 +108,9 @@ namespace ChAvTicks.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AirportFlightEventResponse>))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> SearchAsync([FromBody] SearchFlightsRequest flightsRequest)
+        public async Task<IActionResult> SearchAsync([FromBody] SearchFlightsRequest flightsRequest, int? repeat)
         {
-            var response = await _flightService.SearchAsync(flightsRequest);
+            var response = await _flightService.SearchWithTransfersAsync(flightsRequest, repeat);
 
             if (response == null)
             {
@@ -122,6 +123,18 @@ namespace ChAvTicks.Api.Controllers
             }
 
             return Ok(response.Model);
+        }
+
+        [HttpPost("search-wom")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> SearchWithTransfersWithoutMappingAsync([FromBody] SearchFlightsRequest searchRequest, [FromQuery] SearchFlightsPaginationRequest paginationRequest)
+        {
+            var response = await _flightService.SearchWithTransfersWithoutMappingAsync(searchRequest, paginationRequest); 
+            return Ok(new
+            {
+                flights = response,
+                count = response.Count,
+            });
         }
     }
 }

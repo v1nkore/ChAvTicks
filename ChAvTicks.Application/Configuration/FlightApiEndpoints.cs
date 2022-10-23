@@ -2,9 +2,9 @@
 {
     public static class FlightApiEndpoints
     {
-        private const string BaseEndpoint = "https://aerodatabox.p.rapidapi.com";
+        public const string BaseEndpoint = "https://aerodatabox.p.rapidapi.com";
 
-        public static class FlightEndpoints 
+        public static class FlightEndpoints
         {
             public const string BaseUrl = $"{BaseEndpoint}/flights";
             public const string AirportSchedule = $"{BaseUrl}/airports/icao";

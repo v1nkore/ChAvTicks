@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ChAvTicks.Domain.Enums.Aircraft;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using ChAvTicks.Domain.Enums.Aircraft;
 
 namespace ChAvTicks.Application.Responses.Aircraft
 {

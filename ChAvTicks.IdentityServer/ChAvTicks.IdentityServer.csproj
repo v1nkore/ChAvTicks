@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ChAvTicks.Shared\ChAvTicks.Shared.csproj" />
+    <ProjectReference Include="..\ChAvTicks.Domain\ChAvTicks.Domain.csproj" />
   </ItemGroup>
 
 </Project>

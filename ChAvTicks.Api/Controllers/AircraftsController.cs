@@ -67,7 +67,7 @@ namespace ChAvTicks.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetManyAircraftsAsync([FromQuery, Required] AircraftRequest request)
         {
-            var response = await _aircraftService.GetManyAircraftsAsync(request);
+            var response = await _aircraftService.SearchAircraftsAsync(request);
 
             if (response == null)
             {

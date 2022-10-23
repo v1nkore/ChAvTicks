@@ -17,7 +17,7 @@ namespace ChAvTicks.Api.Controllers
         [HttpGet("airports/{icao}")]
         public async Task<IActionResult> CheckSchedulesOnUpdates([FromRoute] string icao)
         {
-            var response = await _healthcheckService.GetAirportServicesFeeds(icao);
+            var response = await _healthcheckService.GetAirportServicesFeedsAsync(icao);
 
             if (response == null)
             {

@@ -1,11 +1,13 @@
 using ChAvTicks.Application.Configuration;
+using ChAvTicks.Application.HttpRequests;
 using ChAvTicks.Application.Interfaces;
 using ChAvTicks.Application.Parsers.AirportsParser;
 using ChAvTicks.Application.Services;
 using ChAvTicks.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +17,7 @@ var configuration = builder.Configuration
 
 builder.Services.AddOptions<FlightApiSettings>().Bind(configuration.GetSection("FlightApi"));
 
-builder.Services.AddDbContext<ApplicationStore>(config =>
+builder.Services.AddDbContext<ApplicationStorage>(config =>
 {
     config.UseNpgsql(configuration.GetConnectionString("DevConnection"));
 });
@@ -34,7 +36,10 @@ builder.Services.AddAuthorization();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 
 builder.Services.TryAddSingleton<FlightApiSettings, FlightApiSettings>();
 
@@ -42,6 +47,7 @@ builder.Services.TryAddTransient<IFlightService, FlightService>();
 builder.Services.TryAddTransient<IAirportService, AirportService>();
 builder.Services.TryAddTransient<IAircraftService, AircraftService>();
 builder.Services.TryAddTransient<IHealthcheckService, HealthcheckService>();
+builder.Services.TryAddTransient<IRequestBuilder, RequestBuilder>();
 
 builder.Services.AddHostedService<AirportsParser>();
 
@@ -63,6 +69,9 @@ app.UseCors(options =>
 {
     options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
 });
+
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
 
 app.MapControllers();
 

@@ -1,8 +1,8 @@
+using ChAvTicks.Domain.ServiceResponses;
 using ChAvTicks.IdentityServer.Account.Configuration;
 using ChAvTicks.IdentityServer.Account.Requests;
 using ChAvTicks.IdentityServer.Account.Responses;
 using ChAvTicks.IdentityServer.Identity;
-using ChAvTicks.Shared.ServiceResponses;
 using IdentityServer4;
 using IdentityServer4.Events;
 using IdentityServer4.Extensions;
@@ -51,7 +51,7 @@ namespace ChAvTicks.IdentityServer.Account
 
             var result = await _userManager.CreateAsync(user);
 
-            ModelResponseWithError<RegisterResponse, IEnumerable<IdentityError>>? response = null;
+            ModelResponseWithError<RegisterResponse, IEnumerable<IdentityError>>? response;
             if (!result.Succeeded)
             {
                 response = new ModelResponseWithError<RegisterResponse, IEnumerable<IdentityError>>()
@@ -96,7 +96,7 @@ namespace ChAvTicks.IdentityServer.Account
                     await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
                 }
 
-                return Redirect(request.ReturnUrl);
+                return Redirect(request.ReturnUrl ?? Request.Headers["Referrer"].ToString());
             }
 
             if (ModelState.IsValid)
@@ -125,17 +125,15 @@ namespace ChAvTicks.IdentityServer.Account
 
                         if (context is not null)
                         {
-                            return Redirect(request.ReturnUrl);
+                            return Redirect(request.ReturnUrl ?? Request.Headers["Referrer"].ToString());
                         }
 
-                        throw new Exception("invalid return Url");
+                        throw new Exception("invalid return url");
                     }
                 }
-
                 else
                 {
-                    await _events.RaiseAsync(new UserLoginFailureEvent(request.Username, "invalid credentials",
-                        clientId: context?.Client.ClientId));
+                    await _events.RaiseAsync(new UserLoginFailureEvent(request.Username, "invalid credentials", clientId: context?.Client.ClientId));
                     ModelState.AddModelError(string.Empty, AccountOptions.InvalidCredentialsErrorMessage);
                 }
             }
@@ -164,15 +162,20 @@ namespace ChAvTicks.IdentityServer.Account
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout(LogoutRequest logoutModel)
         {
-            var loggedOutResponse = await BuildLoggedOutResponseAsync(logoutModel.LogoutId);
-
-            if (User?.Identity?.IsAuthenticated == true)
+            if (logoutModel.LogoutId != null)
             {
-                await HttpContext.SignOutAsync();
-                await _events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));
+                var loggedOutResponse = await BuildLoggedOutResponseAsync(logoutModel.LogoutId);
+
+                if (User?.Identity?.IsAuthenticated == true)
+                {
+                    await HttpContext.SignOutAsync();
+                    await _events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));
+                }
+
+                return Redirect(loggedOutResponse.PostLogoutRedirectUri ?? Request.Headers["Referrer"].ToString());
             }
 
-            return Redirect(loggedOutResponse.PostLogoutRedirectUri);
+            return Redirect(Request.Headers["Referrer"].ToString());
         }
 
         private async Task<LoginResponse> BuildLoginResponseAsync(string returnUrl)
@@ -213,7 +216,7 @@ namespace ChAvTicks.IdentityServer.Account
 
         private async Task<LoginResponse> BuildLoginResponseAsync(LoginRequest loginModel)
         {
-            var loginResponse = await BuildLoginResponseAsync(loginModel.ReturnUrl);
+            var loginResponse = await BuildLoginResponseAsync(loginModel.ReturnUrl ?? Request.Headers["Referrer"]);
             loginResponse.AllowRememberLogin = loginModel.RememberLogin;
             loginResponse.Username = loginModel.Username;
 

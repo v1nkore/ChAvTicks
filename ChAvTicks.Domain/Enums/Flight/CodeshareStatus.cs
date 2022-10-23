@@ -1,9 +1,14 @@
-﻿namespace ChAvTicks.Domain.Enums.Flight
+﻿using System.ComponentModel;
+
+namespace ChAvTicks.Domain.Enums.Flight
 {
-    public enum CodeshareStatus
-    {
-        Unknown,
-        IsOperator,
-        IsCodeshare,
-    }
+	public enum CodeshareStatus
+	{
+		[Description("Unknown")]
+		Unknown,
+		[Description("Operator")]
+		IsOperator,
+		[Description("Codeshare")]
+		IsCodeshared,
+	}
 }

@@ -5,12 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ChAvTicks.IdentityServer.Persistence
 {
-    public class IdentityStore : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
+    public class IdentityStorage : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
-        public IdentityStore(DbContextOptions<IdentityStore> options) 
+        public IdentityStorage(DbContextOptions<IdentityStorage> options)
             : base(options)
         {
-            
         }
     }
 }

@@ -4,7 +4,7 @@ using ChAvTicks.Application.Responses.Airport.DelayStatistics;
 using ChAvTicks.Application.Responses.Airport.Route;
 using ChAvTicks.Application.Responses.Airport.Runway;
 using ChAvTicks.Domain.Enums.Params.Airport;
-using ChAvTicks.Shared.ServiceResponses;
+using ChAvTicks.Domain.ServiceResponses;
 
 namespace ChAvTicks.Application.Interfaces
 {

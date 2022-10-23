@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace ChAvTicks.IdentityServer.Migrations
 {
-    [DbContext(typeof(IdentityStore))]
+    [DbContext(typeof(IdentityStorage))]
     partial class IdentityStoreModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using ChAvTicks.Application.Responses.Base;
+﻿using ChAvTicks.Application.Responses.Base;
+using System.ComponentModel.DataAnnotations;
 
 namespace ChAvTicks.Application.Responses.Airport.Common
 {
@@ -8,11 +8,12 @@ namespace ChAvTicks.Application.Responses.Airport.Common
             string? Icao,
             string? Iata,
             string? LocalCode,
-            [Required] string Name,
             string? ShortName,
+            [Required] string? FullName,
             string? MunicipalityName,
-            AirportLocationResponse Location,
-            string? CountryCode)
+            AirportLocationResponse? Location,
+            string? CountryCode,
+            string? CountryName)
         : AirportResponseBase(
             Icao,
             Iata,

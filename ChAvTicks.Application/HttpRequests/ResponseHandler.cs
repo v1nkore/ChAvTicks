@@ -1,7 +1,7 @@
-﻿using System.Net;
+﻿using ChAvTicks.Application.JsonConverters;
+using ChAvTicks.Domain.ServiceResponses;
+using System.Net;
 using System.Text.Json;
-using ChAvTicks.Application.JsonConverters;
-using ChAvTicks.Shared.ServiceResponses;
 
 namespace ChAvTicks.Application.HttpRequests
 {
@@ -18,7 +18,7 @@ namespace ChAvTicks.Application.HttpRequests
                         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                         Converters =
                         {
-                            new DateTimeConverter(),
+                            new DateTimeConverter()
                         },
                     });
 

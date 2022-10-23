@@ -9,5 +9,5 @@ namespace ChAvTicks.Application.Responses.Base
         string? LocalCode,
         string? ShortName,
         string? MunicipalityName,
-        AirportLocationResponse Location);
+        AirportLocationResponse? Location);
 }

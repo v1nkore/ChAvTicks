@@ -1,23 +1,33 @@
 ﻿using ChAvTicks.Application.Configuration;
+using ChAvTicks.Application.Interfaces;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
 
 namespace ChAvTicks.Application.HttpRequests
 {
-    public static class RequestBuilder
+    public class RequestBuilder : IRequestBuilder
     {
-        public static HttpRequestMessage CreateFlightRequest(HttpMethod httpMethod, Uri uri, IOptions<FlightApiSettings> flightApiSettings, HttpHeaders? headers = null)
+        private readonly IOptions<FlightApiSettings> _flightApiSettings;
+
+        public RequestBuilder(IOptions<FlightApiSettings> flightApiSettings)
+        {
+            _flightApiSettings = flightApiSettings;
+        }
+
+        public HttpRequestMessage Build(HttpMethod httpMethod, Uri uri, HttpHeaders? headers = null, HttpContent? content = null)
         {
             var request = new HttpRequestMessage()
             {
                 Method = httpMethod,
                 RequestUri = uri,
-                Headers =
-                {
-                    {FlightApiEndpoints.HeaderKeys.ApiKey, flightApiSettings.Value.Key},
-                    {FlightApiEndpoints.HeaderKeys.ApiHost, flightApiSettings.Value.Host},
-                },
+                Content = content,
             };
+
+            if (uri.OriginalString.StartsWith(FlightApiEndpoints.BaseEndpoint))
+            {
+                request.Headers.Add(FlightApiEndpoints.HeaderKeys.ApiKey, _flightApiSettings.Value.Key);
+                request.Headers.Add(FlightApiEndpoints.HeaderKeys.ApiHost, _flightApiSettings.Value.Host);
+            }
 
             if (headers is not null)
             {

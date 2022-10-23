@@ -1,16 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
 
 namespace ChAvTicks.Domain.Enums.Params.Flight
 {
-    public enum FlightSearchBy
-    {
-        [Display(Name = "Number")]
-        Number,
-        [Display(Name = "Registration")]
-        Reg,
-        [Display(Name = "CallSign")]
-        CallSign,
-        [Display(Name = "Icao24")]
-        Icao24
-    }
+	public enum FlightSearchBy
+	{
+		[Description("Number")]
+		Number,
+		[Description("Registration")]
+		Reg,
+		[Description("Call sign")]
+		CallSign,
+		[Description("Icao")]
+		Icao24
+	}
 }

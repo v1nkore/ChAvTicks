@@ -2,6 +2,6 @@
 {
     public class LogoutRequest
     {
-        public string LogoutId { get; set; }
+        public string? LogoutId { get; set; }
     }
 }

@@ -11,10 +11,11 @@ export class FlightsComponent implements OnInit {
   constructor() { }
 
   public flights: FlightSearchResponse[];
-  public departureAirport: any;
 
   ngOnInit(): void {
-    this.flights =  history.state.flights as FlightSearchResponse[];
+    this.flights = JSON.parse(localStorage.getItem('flights') as string);
+
+    console.log(this.flights);
   }
 
 }
