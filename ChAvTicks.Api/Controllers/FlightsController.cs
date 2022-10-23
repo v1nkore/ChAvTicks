@@ -105,12 +105,10 @@ namespace ChAvTicks.Api.Controllers
         }
 
         [HttpPost("search")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AirportFlightEventResponse>))]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> SearchAsync([FromBody] SearchFlightsRequest flightsRequest, int? repeat)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> SearchWithTransfersWithoutMappingAsync([FromBody] SearchFlightsRequest searchRequest, [FromQuery] SearchFlightsPaginationRequest paginationRequest)
         {
-            var response = await _flightService.SearchWithTransfersAsync(flightsRequest, repeat);
+            var response = await _flightService.SearchWithTransfersAsync(searchRequest, paginationRequest);
 
             if (response == null)
             {
@@ -121,20 +119,8 @@ namespace ChAvTicks.Api.Controllers
             {
                 return BadRequest(response.ErrorMessage);
             }
-
+            
             return Ok(response.Model);
-        }
-
-        [HttpPost("search-wom")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> SearchWithTransfersWithoutMappingAsync([FromBody] SearchFlightsRequest searchRequest, [FromQuery] SearchFlightsPaginationRequest paginationRequest)
-        {
-            var response = await _flightService.SearchWithTransfersWithoutMappingAsync(searchRequest, paginationRequest); 
-            return Ok(new
-            {
-                flights = response,
-                count = response.Count,
-            });
         }
     }
 }
